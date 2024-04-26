@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AnonymousAuthScreen extends StatelessWidget {
   const AnonymousAuthScreen({super.key});
+  static String routeName = "/AnonymousAuthScreen";
 
   @override
   Widget build(BuildContext context) {
