@@ -1,35 +1,29 @@
-import 'package:bmi_calculator/core/utility/routes/app_router.dart';
-import 'package:bmi_calculator/features/Auth/presentation/screens/auth_screen.dart';
-import 'package:bmi_calculator/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:bmi_calculator/controllers/auth_controller.dart';
+import 'package:bmi_calculator/controllers/firestore_controller.dart';
+import 'package:bmi_calculator/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.android,
-  );
-  runApp(const MyApp());
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // Initialize AuthController
+  Get.put(AuthController());
+  Get.put(FirestoreController());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: '/',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-          ),
-        ),
-      );
-    });
+    return GetMaterialApp(
+      title: 'Your App',
+      initialRoute: AppRoutes.signIn,
+      getPages: AppRoutes.routes,
+    );
   }
 }

@@ -38,9 +38,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
+  get: ^4.6.6
   page_transition: ^2.1.0
   shared_preferences: ^2.2.3
   sizer: ^2.0.15
+  syncfusion_flutter_gauges: ^25.1.41
 
 dev_dependencies:
   flutter_lints: ^3.0.0
