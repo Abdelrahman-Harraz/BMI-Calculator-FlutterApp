@@ -1,4 +1,7 @@
 part of 'auth_bloc.dart';
 
-@immutable
-sealed class AuthEvent {}
+abstract class AuthEvent {}
+
+class SignInAnonymously extends AuthEvent {}
+
+class SignOut extends AuthEvent {}
