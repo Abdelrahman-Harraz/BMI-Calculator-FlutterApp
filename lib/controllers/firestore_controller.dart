@@ -1,5 +1,5 @@
 import 'package:bmi_calculator/controllers/auth_controller.dart';
-import 'package:bmi_calculator/models/entry.dart';
+import 'package:bmi_calculator/models/bmi_model.dart';
 import 'package:bmi_calculator/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,12 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FirestoreController extends GetxController {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  final int _pageSize = 10;
-  final Rx<List<Entry>> _entries = Rx<List<Entry>>([]);
+  final Rx<List<BmiModel>> _entries = Rx<List<BmiModel>>([]);
 
-  List<Entry> get entries => _entries.value;
+  List<BmiModel> get entries => _entries.value;
 
-  Stream<List<Entry>> get entriesStream {
+  Stream<List<BmiModel>> get entriesStream {
     final authController = Get.find<AuthController>();
     final userId = authController.userId;
     if (userId == null) return const Stream.empty();
@@ -27,8 +26,7 @@ class FirestoreController extends GetxController {
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) =>
-                Entry.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+            .map((doc) => BmiModel.fromJson(doc.data(), doc.id))
             .toList());
   }
 
@@ -115,16 +113,14 @@ class FirestoreController extends GetxController {
           confirmTextColor: Colors.white,
           cancelTextColor: Colors.black,
           onConfirm: () async {
-            // Delete user data and sign out
             await _firestore.collection('users').doc(userId).delete();
             await prefs.remove('userId');
             _entries.value = [];
             await _auth.signOut();
-            Get.offAllNamed(AppRoutes.signIn); // Navigate to sign-in screen
+            Get.offAllNamed(AppRoutes.signIn);
           },
         );
       } else {
-        // If userId is null, just sign out without prompting
         await _auth.signOut();
       }
     } catch (e) {

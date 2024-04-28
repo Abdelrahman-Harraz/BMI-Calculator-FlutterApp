@@ -1,6 +1,4 @@
 import 'package:bmi_calculator/controllers/entry_list_controller.dart';
-import 'package:bmi_calculator/models/entry.dart';
-import 'package:bmi_calculator/routes.dart';
 import 'package:bmi_calculator/screens/edit_entry_screen.dart';
 import 'package:bmi_calculator/widgets/bmi_gauge.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:sizer/sizer.dart';
 class EntryListScreen extends StatelessWidget {
   final EntryListController _entryListController =
       Get.put(EntryListController());
+
+  EntryListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

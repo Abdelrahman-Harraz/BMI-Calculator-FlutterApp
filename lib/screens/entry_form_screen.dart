@@ -1,17 +1,12 @@
 import 'package:bmi_calculator/controllers/bmi_controller.dart';
-import 'package:bmi_calculator/core/utility/bmi_calculate.dart';
-import 'package:bmi_calculator/routes.dart';
 import 'package:bmi_calculator/screens/entry_list_screen.dart';
 import 'package:bmi_calculator/theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:sizer/sizer.dart';
 
 class EntryFormScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +19,6 @@ class EntryFormScreen extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.all(10),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 60),

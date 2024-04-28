@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:uuid/uuid.dart'; // Import the uuid package
+import 'package:uuid/uuid.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
-  FirebaseAuth _auth = FirebaseAuth.instance;
   String? _userId;
 
   Future<void> signInAnonymously() async {
@@ -14,8 +12,6 @@ class AuthController extends GetxController {
 
     if (_userId == null) {
       try {
-        final userCredential = await _auth.signInAnonymously();
-        final user = userCredential.user;
         _userId = Uuid().v4();
         prefs.setString('userId', _userId!);
         print('User ID: $_userId');

@@ -1,5 +1,3 @@
-// lib/screens/sign_in_screen.dart
-
 import 'package:bmi_calculator/controllers/auth_controller.dart';
 import 'package:bmi_calculator/routes.dart';
 import 'package:bmi_calculator/theme.dart';
@@ -9,6 +7,8 @@ import 'package:sizer/sizer.dart';
 
 class SignInScreen extends StatelessWidget {
   final AuthController _authController = Get.find();
+
+  SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

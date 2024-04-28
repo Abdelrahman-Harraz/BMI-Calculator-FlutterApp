@@ -1,6 +1,4 @@
-// lib/models/entry.dart
-
-class Entry {
+class BmiModel {
   final String id;
   final double weight;
   final double height;
@@ -8,7 +6,7 @@ class Entry {
   final double bmi;
   final DateTime timestamp;
 
-  Entry(
+  BmiModel(
       {required this.id,
       required this.weight,
       required this.height,
@@ -16,8 +14,8 @@ class Entry {
       required this.bmi,
       required this.timestamp});
 
-  factory Entry.fromJson(Map<String, dynamic> json, String id) {
-    return Entry(
+  factory BmiModel.fromJson(Map<String, dynamic> json, String id) {
+    return BmiModel(
       id: id,
       weight: json['weight'] ?? 0.0,
       height: json['height'] ?? 0.0,

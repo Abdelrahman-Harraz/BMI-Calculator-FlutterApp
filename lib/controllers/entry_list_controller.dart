@@ -1,17 +1,17 @@
 import 'package:bmi_calculator/controllers/firestore_controller.dart';
-import 'package:bmi_calculator/models/entry.dart';
+import 'package:bmi_calculator/models/bmi_model.dart';
 import 'package:get/get.dart';
 
 class EntryListController extends GetxController {
   final FirestoreController firestoreController = Get.find();
-  final _entries = <Entry>[].obs;
+  final _entries = <BmiModel>[].obs;
   final currentPage = 0.obs;
   final _itemsPerPage = 10;
   final _isLoading = true.obs;
   final _hasError = false.obs;
   final _errorMessage = ''.obs;
 
-  List<Entry> get entries => _entries;
+  List<BmiModel> get entries => _entries;
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
   String get errorMessage => _errorMessage.value;
@@ -38,7 +38,7 @@ class EntryListController extends GetxController {
     );
   }
 
-  List<Entry> get paginatedEntries {
+  List<BmiModel> get paginatedEntries {
     if (_entries.isEmpty) return [];
     final startIndex = currentPage.value * _itemsPerPage;
     final endIndex = startIndex + _itemsPerPage > _entries.length
