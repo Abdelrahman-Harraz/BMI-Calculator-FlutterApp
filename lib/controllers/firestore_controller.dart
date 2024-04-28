@@ -1,8 +1,11 @@
 import 'package:bmi_calculator/controllers/auth_controller.dart';
 import 'package:bmi_calculator/models/entry.dart';
+import 'package:bmi_calculator/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirestoreController extends GetxController {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -99,8 +102,31 @@ class FirestoreController extends GetxController {
   }
 
   Future<void> signOut() async {
+    final prefs = await SharedPreferences.getInstance();
     try {
-      await _auth.signOut();
+      final userId = prefs.getString('userId');
+      if (userId != null) {
+        Get.defaultDialog(
+          title: 'Confirm Sign Out',
+          middleText:
+              'Are you sure you want to sign out? All your data will be deleted.',
+          textConfirm: 'Yes',
+          textCancel: 'No',
+          confirmTextColor: Colors.white,
+          cancelTextColor: Colors.black,
+          onConfirm: () async {
+            // Delete user data and sign out
+            await _firestore.collection('users').doc(userId).delete();
+            await prefs.remove('userId');
+            _entries.value = [];
+            await _auth.signOut();
+            Get.offAllNamed(AppRoutes.signIn); // Navigate to sign-in screen
+          },
+        );
+      } else {
+        // If userId is null, just sign out without prompting
+        await _auth.signOut();
+      }
     } catch (e) {
       print('Error signing out: $e');
     }

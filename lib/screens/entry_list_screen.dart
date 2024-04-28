@@ -21,7 +21,6 @@ class EntryListScreen extends StatelessWidget {
             icon: Icon(Icons.logout),
             onPressed: () {
               _entryListController.firestoreController.signOut();
-              Get.toNamed(AppRoutes.signIn);
             },
           ),
         ],
