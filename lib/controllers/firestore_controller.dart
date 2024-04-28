@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class FirestoreController extends GetxController {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final int _pageSize = 10;
   final Rx<List<Entry>> _entries = Rx<List<Entry>>([]);
   List<Entry> get entries => _entries.value;
 

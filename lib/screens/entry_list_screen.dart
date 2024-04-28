@@ -1,4 +1,4 @@
-import 'package:bmi_calculator/controllers/firestore_controller.dart';
+import 'package:bmi_calculator/controllers/entry_list_controller.dart';
 import 'package:bmi_calculator/models/entry.dart';
 import 'package:bmi_calculator/routes.dart';
 import 'package:bmi_calculator/screens/edit_entry_screen.dart';
@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class EntryListScreen extends StatelessWidget {
-  final FirestoreController _firestoreController = Get.find();
+  final EntryListController _entryListController =
+      Get.put(EntryListController());
 
   @override
   Widget build(BuildContext context) {
@@ -19,26 +20,25 @@ class EntryListScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              _firestoreController.signOut();
+              _entryListController.firestoreController.signOut();
               Get.toNamed(AppRoutes.signIn);
             },
           ),
         ],
       ),
-      body: StreamBuilder<List<Entry>>(
-        stream: _firestoreController.entriesStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          final entries = snapshot.data ?? [];
+      body: Obx(() {
+        if (_entryListController.entries.isEmpty &&
+            _entryListController.isLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else if (_entryListController.entries.isEmpty &&
+            _entryListController.hasError) {
+          return Center(
+              child: Text('Error: ${_entryListController.errorMessage}'));
+        } else {
           return ListView.builder(
-            itemCount: entries.length,
+            itemCount: _entryListController.paginatedEntries.length,
             itemBuilder: (context, index) {
-              final entry = entries[index];
+              final entry = _entryListController.paginatedEntries[index];
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 elevation: 4,
@@ -74,7 +74,8 @@ class EntryListScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete, size: 22.sp),
                         onPressed: () {
-                          _firestoreController.deleteEntry(entry.id);
+                          _entryListController.firestoreController
+                              .deleteEntry(entry.id);
                         },
                       ),
                       onTap: () {
@@ -93,7 +94,27 @@ class EntryListScreen extends StatelessWidget {
               );
             },
           );
+        }
+      }),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _entryListController.currentPage.value,
+        onTap: (index) {
+          if (index == 0) {
+            _entryListController.previousPage();
+          } else if (index == 1) {
+            _entryListController.nextPage();
+          }
         },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_back),
+            label: 'Previous',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_forward),
+            label: 'Next',
+          ),
+        ],
       ),
     );
   }
