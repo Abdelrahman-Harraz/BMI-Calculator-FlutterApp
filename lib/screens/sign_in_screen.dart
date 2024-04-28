@@ -2,8 +2,10 @@
 
 import 'package:bmi_calculator/controllers/auth_controller.dart';
 import 'package:bmi_calculator/routes.dart';
+import 'package:bmi_calculator/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class SignInScreen extends StatelessWidget {
   final AuthController _authController = Get.find();
@@ -11,17 +13,32 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign In'),
-      ),
+      backgroundColor: OwnTheme.backgroundColor,
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            print('Sign-in button pressed');
-            _authController.signInAnonymously();
-            Get.toNamed(AppRoutes.entryForm);
-          },
-          child: Text('Sign In Anonymously'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/bmiLogo.png',
+              width: 50.w,
+            ),
+            SizedBox(height: 5.h),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStatePropertyAll(OwnTheme.secondaryColor)),
+              onPressed: () {
+                print('Sign-in button pressed');
+                _authController.signInAnonymously();
+                Get.offNamed(AppRoutes.entryForm);
+              },
+              child: Text(
+                'Sign In Anonymously',
+                style: OwnTheme.buttonTextStyle()
+                    .copyWith(color: OwnTheme.callToActionColor),
+              ),
+            ),
+          ],
         ),
       ),
     );

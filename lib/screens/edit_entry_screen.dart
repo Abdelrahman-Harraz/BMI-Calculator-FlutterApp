@@ -1,37 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:bmi_calculator/controllers/firestore_controller.dart';
+import 'package:bmi_calculator/controllers/bmi_controller.dart';
+import 'package:bmi_calculator/core/utility/bmi_calculate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:bmi_calculator/models/entry.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 
-class EditEntryData extends StatefulWidget {
+class EditEntryData extends StatelessWidget {
   final Entry entry;
-  EditEntryData({
-    Key? key,
-    required this.entry,
-  }) : super(key: key);
-
-  @override
-  State<EditEntryData> createState() => _EditEntryDataState();
-}
-
-class _EditEntryDataState extends State<EditEntryData> {
   final _formKey = GlobalKey<FormState>();
-  final _weightController = TextEditingController();
-  final _heightController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _firestoreController = Get.find<FirestoreController>();
-  @override
-  void initState() {
-    _weightController.text = widget.entry.weight.toString();
-    _heightController.text = widget.entry.height.toString();
-    _ageController.text = widget.entry.age.toString();
-    super.initState();
+  final BmiController _bmiController = Get.find<BmiController>();
+
+  EditEntryData({Key? key, required this.entry}) : super(key: key) {
+    // Set initial values of text controllers
+    _bmiController.weightController.text = entry.weight.toString();
+    _bmiController.heightController.text = entry.height.toString();
+    _bmiController.ageController.text = entry.age.toString();
   }
 
   @override
@@ -44,71 +31,58 @@ class _EditEntryDataState extends State<EditEntryData> {
         padding: EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _weightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Weight (kg)'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your weight';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _heightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Height (m)'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your height';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _ageController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Age'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your age';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _updateEntry();
-                  }
-                },
-                child: Text('Save Changes'),
-              ),
-            ],
+          child: GetBuilder<BmiController>(
+            builder: (BmiController controller) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: controller.weightController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Weight (kg)'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your weight';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: controller.heightController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Height (m)'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your height';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: controller.ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Age'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your age';
+                      }
+                      return null;
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        controller.updateEntry(entry.id);
+                      }
+                    },
+                    child: Text('Save Changes'),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
-  }
-
-  void _updateEntry() {
-    final weight = double.parse(_weightController.text);
-    final height = double.parse(_heightController.text);
-    final age = int.parse(_ageController.text);
-    final bmi = weight / (height * height);
-
-    _firestoreController.updateEntry(
-      widget.entry.id,
-      weight,
-      height,
-      age,
-      bmi,
-    );
-
-    Get.back(); // Navigate back to previous screen
   }
 }

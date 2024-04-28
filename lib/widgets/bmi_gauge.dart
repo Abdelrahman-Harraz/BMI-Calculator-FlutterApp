@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class BMIGauge extends StatelessWidget {
@@ -36,7 +37,7 @@ class BMIGauge extends StatelessWidget {
               startValue: 30,
               endValue: 40,
               color: Colors.red,
-              label: 'Obese',
+              label: 'Obesity',
             ),
           ],
           pointers: <GaugePointer>[
@@ -49,7 +50,7 @@ class BMIGauge extends StatelessWidget {
           annotations: <GaugeAnnotation>[
             GaugeAnnotation(
               widget: Text(
-                'BMI: $bmi',
+                'BMI: ${bmi.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               angle: 90,

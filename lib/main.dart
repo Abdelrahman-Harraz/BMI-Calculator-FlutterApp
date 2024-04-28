@@ -1,20 +1,21 @@
 import 'package:bmi_calculator/controllers/auth_controller.dart';
+import 'package:bmi_calculator/controllers/bmi_controller.dart';
 import 'package:bmi_calculator/controllers/firestore_controller.dart';
 import 'package:bmi_calculator/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
+import 'package:sizer/sizer.dart'; // Import the sizer package
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase
   await Firebase.initializeApp();
-
-  // Initialize AuthController
   Get.put(AuthController());
   Get.put(FirestoreController());
-  runApp(MyApp());
+  Get.put(BmiController());
+  runApp(Sizer(builder: (context, orientation, deviceType) {
+    return MyApp();
+  }));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Your App',
+      debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.signIn,
       getPages: AppRoutes.routes,
     );
