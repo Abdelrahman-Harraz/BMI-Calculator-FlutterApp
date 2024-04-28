@@ -25,17 +25,23 @@ class SignInScreen extends StatelessWidget {
             SizedBox(height: 5.h),
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(OwnTheme.secondaryColor)),
-              onPressed: () {
+                backgroundColor:
+                    MaterialStatePropertyAll(OwnTheme.secondaryColor),
+              ),
+              onPressed: () async {
                 print('Sign-in button pressed');
-                _authController.signInAnonymously();
-                Get.offNamed(AppRoutes.entryForm);
+                await _authController.signInAnonymously();
+                if (_authController.userId != null) {
+                  Get.offNamed(AppRoutes.entryForm);
+                } else {
+                  // Handle sign-in error
+                }
               },
               child: Text(
                 'Sign In Anonymously',
-                style: OwnTheme.buttonTextStyle()
-                    .copyWith(color: OwnTheme.callToActionColor),
+                style: OwnTheme.buttonTextStyle().copyWith(
+                  color: OwnTheme.callToActionColor,
+                ),
               ),
             ),
           ],

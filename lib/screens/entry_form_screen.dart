@@ -109,13 +109,17 @@ class EntryFormScreen extends StatelessWidget {
                               .copyWith(color: OwnTheme.callToActionColor)),
                     ),
                     TextButton(
-                        onPressed: () {
-                          Get.to(EntryListScreen());
-                        },
-                        child: Text("Go to your previous data >>>",
-                            style: OwnTheme.bodyTextStyle().copyWith(
-                                color: OwnTheme.red,
-                                fontWeight: FontWeight.bold)))
+                      onPressed: () {
+                        Get.to(() => EntryListScreen(), arguments: controller);
+                      },
+                      child: Text(
+                        "Go to your previous data >>>",
+                        style: OwnTheme.bodyTextStyle().copyWith(
+                          color: OwnTheme.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -125,30 +129,4 @@ class EntryFormScreen extends StatelessWidget {
       ),
     );
   }
-
-  // void _submitData(BmiController controller) async {
-  //   final weight = double.parse(controller.weightController.text);
-  //   final heightCM =
-  //       double.parse(controller.heightController.text); // Parse height in cm
-  //   final age = int.parse(controller.ageController.text);
-  //   final heightM = heightCM / 100; // Convert height to meters
-  //   final bmi =
-  //       calculateBMI(weight, heightM); // Use height in meters for calculation
-  //   try {
-  //     await _firestore.collection('entries').add({
-  //       'weight': weight,
-  //       'height': heightCM, // Save height in cm to the database
-  //       'age': age,
-  //       'bmi': bmi,
-  //       'timestamp': DateTime.now(),
-  //     });
-  //     // Clear form fields after submission
-  //     controller.weightController.clear();
-  //     controller.heightController.clear();
-  //     controller.ageController.clear();
-  //     Get.toNamed(AppRoutes.entryList);
-  //   } catch (e) {
-  //     print('Error submitting data: $e');
-  //   }
-  // }
 }

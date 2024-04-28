@@ -27,13 +27,18 @@ class EntryListScreen extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        if (_entryListController.entries.isEmpty &&
-            _entryListController.isLoading) {
+        if (_entryListController.isLoading) {
           return Center(child: CircularProgressIndicator());
-        } else if (_entryListController.entries.isEmpty &&
-            _entryListController.hasError) {
+        } else if (_entryListController.hasError) {
           return Center(
               child: Text('Error: ${_entryListController.errorMessage}'));
+        } else if (_entryListController.entries.isEmpty) {
+          return Center(
+            child: Text(
+              'No BMI entries found.',
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+            ),
+          );
         } else {
           return ListView.builder(
             itemCount: _entryListController.paginatedEntries.length,

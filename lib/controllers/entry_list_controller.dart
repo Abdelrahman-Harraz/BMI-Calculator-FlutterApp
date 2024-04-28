@@ -12,9 +12,9 @@ class EntryListController extends GetxController {
   final _errorMessage = ''.obs;
 
   List<Entry> get entries => _entries;
-  bool get isLoading => isLoading;
-  bool get hasError => hasError;
-  String get errorMessage => errorMessage;
+  bool get isLoading => _isLoading.value;
+  bool get hasError => _hasError.value;
+  String get errorMessage => _errorMessage.value;
 
   @override
   void onInit() {
@@ -39,6 +39,7 @@ class EntryListController extends GetxController {
   }
 
   List<Entry> get paginatedEntries {
+    if (_entries.isEmpty) return [];
     final startIndex = currentPage.value * _itemsPerPage;
     final endIndex = startIndex + _itemsPerPage > _entries.length
         ? _entries.length
